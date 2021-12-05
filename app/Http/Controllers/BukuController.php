@@ -8,8 +8,11 @@ use App\Models\Buku;
 class BukuController extends Controller
 {
     public function index() {
-        $data_buku = Buku::all();
-        return view('buku.index', compact('data_buku'));
+        $batas = 5;
+        $jumlah_buku = Buku::count();
+        $data_buku = Buku::orderBy('id', 'desc')->paginate($batas);
+        $no = $batas * ($data_buku->currentPage() - 1);
+        return view('buku.index', compact('data_buku', 'no', 'jumlah_buku')); 
     }
 
     public function create() {
@@ -17,13 +20,20 @@ class BukuController extends Controller
     }
 
     public function store() {
+        $this->validate(request(), [
+            'judul' => 'required|string',
+            'penulis' => 'required|string|max:30',
+            'harga' => 'required|numeric',
+            'tgl_terbit' => 'required|date',
+        ]);
+
         $buku = new Buku;
         $buku->judul      = request('judul');
         $buku->penulis    = request('penulis');
         $buku->harga      = request('harga');
         $buku->tgl_terbit = request('tgl_terbit');
         $buku->save();
-        return redirect('/');
+        return redirect('/')->with('pesan', 'Data Berhasil Ditambahkan');
     }
 
     public function edit($id) {
@@ -38,12 +48,20 @@ class BukuController extends Controller
         $buku->harga      = request('harga');
         $buku->tgl_terbit = request('tgl_terbit');
         $buku->update();
-        return redirect('/');
+        return redirect('/')->with('pesan', 'Data Berhasil Diubah');
     }
 
     public function destroy($id) {
         $buku = Buku::find($id);
         $buku->delete();
-        return redirect('/');
+        return redirect('/')->with('pesan', 'Data Berhasil Dihapus');
+    }
+
+    public function search(Request $request) {
+        $batas = 5;
+        $cari = $request->cari;
+        $data_buku = Buku::where('judul', 'like', '%' . $cari . '%')->paginate($batas);
+        $no = $batas * ($data_buku->currentPage() - 1);
+        return view('buku.search', compact('data_buku', 'no', 'cari'));
     }
 }

@@ -1,6 +1,8 @@
 @extends('layouts.master')
 @section ('content')
+  @if(count($data_buku) > 0)
   <div class="container">
+    <div class="alert alert-success mt-4">Ditemukan {{ count($data_buku) }} data  dengan kata {{ $cari }}</div>
     @if(Session::has('pesan'))
       <div class="alert alert-success mt-4">
         {{ Session::get('pesan') }}
@@ -58,11 +60,17 @@
             </table>
             <div class="area">
               <div class="kanan">{{ $data_buku->links('pagination::bootstrap-4') }}</div>
-              <div class="kiri"><strong>Jumlah Buku: {{ $jumlah_buku }}</strong></div>
+              <div class="kiri"><strong>Jumlah Buku: {{ count($data_buku) }}</strong></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  @else
+    <div class="alert alert-danger">
+      Data {{ $cari }}tidak ditemukan
+      <a href="/">Kembali</a>
+    </div>
   </div>
+  @endif
 @endsection

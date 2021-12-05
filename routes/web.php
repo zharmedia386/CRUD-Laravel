@@ -19,3 +19,4 @@ Route::post('/store', 'App\Http\Controllers\BukuController@store')->name('buku.s
 Route::post('/buku/delete/{id}', 'App\Http\Controllers\BukuController@destroy')->name('buku.destroy');
 Route::get('/edit/{id}', 'App\Http\Controllers\BukuController@edit')->name('buku.edit');
 Route::post('/update/{id}', 'App\Http\Controllers\BukuController@update')->name('buku.update');
+Route::get('/search', 'App\Http\Controllers\BukuController@search')->name('buku.search');

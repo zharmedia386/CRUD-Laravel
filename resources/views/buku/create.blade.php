@@ -1,9 +1,18 @@
 @extends('layouts.master')
 @section('content')
   <div class="container">
+    @if (count($errors) > 0)
+      <div class="alert alert-danger mt-4">
+        <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default my-5">
+            <div class="panel panel-default mb-5 mt-3">
                 <h3 class="card-title">Tambah Buku</h3>
                 <div class="panel-body">
                     <form action="{{ route('buku.store')}}" method="post">
@@ -22,7 +31,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tgl_terbit">Tgl. Terbit</label>
-                            <input type="text" name="tgl_terbit" class="form-control">
+                            <input type="text" id="tgl_terbit" name="tgl_terbit" class="date form-control" placeholder="yyyy/mm/dd">
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">
